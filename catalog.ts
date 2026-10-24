@@ -5,15 +5,9 @@ type Game = (typeof catalog)[number];
 const games: Game[] = catalog;
 const main = document.querySelector<HTMLElement>('#main')!;
 let query = '';
-let toastTimer: ReturnType<typeof setTimeout>;
 const escape = (value: string) => value.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 const image = (game: Game) => `<img src="${escape(game.image)}" alt="${escape(game.name)} artwork" width="130" height="130" loading="lazy" data-fallback>`;
-const card = (game: Game) => `<a class="item" href="#app/${game.id}" aria-label="View ${escape(game.name)} details"><div class="image">${image(game)}<span class="mod">MOD</span></div><h3 class="name">${escape(game.name)}</h3><p class="card-category">${game.category}</p><div class="more"><span>View details</span><span aria-hidden="true">↗</span></div></a>`;
-function notify(message: string) {
-  const toast = document.querySelector<HTMLElement>('#toast')!;
-  clearTimeout(toastTimer); toast.textContent = message; toast.classList.add('visible');
-  toastTimer = setTimeout(() => toast.classList.remove('visible'), 3500);
-}
+const card = (game: Game) => `<a class="item" href="#app/${game.id}" aria-label="View ${escape(game.name)} details"><div class="image">${image(game)}<span class="mod">MOD</span></div><h3 class="name">${escape(game.name)}</h3><p class="card-category">${game.category}</p><div class="more"><span>Download</span><span aria-hidden="true">↓</span></div></a>`;
 function renderResults() {
   const filtered = games.filter(g => `${g.name} ${g.description} ${g.category}`.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase()));
   document.querySelector('#game-list')!.innerHTML = filtered.map(card).join('');
@@ -29,7 +23,7 @@ function discover() {
 }
 function details(game: Game) {
   document.title = `${game.name} — Game MODs`;
-  main.innerHTML = `<a class="back-link" href="#catalog">← Back to games</a><article class="detail-page"><div class="detail-heading"><div class="detail-art">${image(game)}</div><div><span class="eyebrow">${game.category} · GAME DETAILS</span><h1>${escape(game.name)}</h1><span class="status-badge">Mobile game / MOD</span></div></div><div class="detail-columns"><section><h2>About this game</h2><p>${escape(game.description)}</p><div class="release-info"><h3>Release information</h3><dl><div><dt>Category</dt><dd>${game.category}</dd></div><div><dt>Platforms</dt><dd>Not confirmed</dd></div><div><dt>Version &amp; file size</dt><dd>Not published</dd></div><div><dt>Availability</dt><dd>Through content locker</dd></div></dl></div><h2>Before you download</h2><p>Check device compatibility before installing. Tap Download to open the offer window. The provider handles offer completion and access to the download.</p></section><aside class="download-panel" aria-labelledby="download-heading"><span class="download-icon" aria-hidden="true">↓</span><h2 id="download-heading">Get ${escape(game.name)}</h2><p>Complete an offer in the content locker to continue to the download.</p><button id="download" class="primary-button">Download</button><p id="download-feedback" role="status" aria-live="polite"></p><button id="share" class="secondary-button">Copy page link ↗</button><p id="share-feedback" role="status" class="share-feedback"></p><small>Offer requirements and any costs are shown by the provider. Review them before continuing.</small></aside></div></article><section class="related"><div class="the-title"><h2 class="name">Keep exploring</h2></div><div class="game catalog-grid">${games.filter(g => g.id !== game.id).map(card).join('')}</div></section>`;
+  main.innerHTML = `<a class="back-link" href="#catalog">← All apps</a><article class="quick-download" aria-labelledby="app-name"><div class="quick-art">${image(game)}</div><span class="status-badge">${game.category} · MOD</span><h1 id="app-name">${escape(game.name)}</h1><p class="quick-description">${escape(game.description)}</p><button id="download" class="primary-button">Download <span aria-hidden="true">↓</span></button><p class="offer-note">Opens an offer window. Complete the provider’s requirements to continue.</p><p id="download-feedback" role="status" aria-live="polite"></p></article>`;
   const download = main.querySelector<HTMLButtonElement>('#download')!;
   const downloadFeedback = main.querySelector<HTMLElement>('#download-feedback')!;
   download.addEventListener('click', async () => {
@@ -40,11 +34,7 @@ function details(game: Game) {
     catch (error) { downloadFeedback.textContent = error instanceof Error ? error.message : 'Could not open offers. Please try again.'; }
     finally { download.disabled = false; download.textContent = 'Download'; }
   });
-  main.querySelector('#share')!.addEventListener('click', async () => {
-    const feedback = main.querySelector<HTMLElement>('#share-feedback')!;
-    try { await navigator.clipboard.writeText(location.href); feedback.textContent = 'Link copied!'; notify('Page link copied'); }
-    catch { feedback.textContent = `Copy this address: ${location.href}`; }
-  });
+
 }
 function route() {
   const hash = location.hash.slice(1);

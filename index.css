@@ -197,3 +197,7 @@
 
 /* Keep the catalog immediately visible on phones and desktops. */
 #catalog{padding-top:8px;min-height:60vh}#catalog .the-title{margin:18px 0 10px}#catalog .search .inp{margin:16px 0!important}#catalog-heading{letter-spacing:0}.catalog-grid{align-items:stretch}.xload .game .item{height:calc(100% - 20px)}
+
+/* One compact app panel keeps the download action above the fold. */
+.quick-download{width:100%;max-width:420px;margin:0 auto 32px;padding:28px 24px;text-align:center;background:var(--bg-secondary);border:1px solid #30223f;border-radius:22px}.quick-art img{width:112px;height:112px;object-fit:cover;border-radius:24px;background:var(--bg-elevated);border:3px solid #302a42}.quick-download .status-badge{margin-top:14px}.quick-download h1{font-size:28px;line-height:1.2;letter-spacing:-.5px;margin:14px 0 10px}.quick-description{color:var(--text-secondary);font-size:14px;line-height:1.5;margin:0 0 20px}.quick-download .primary-button{width:100%;min-height:52px;font-size:18px;gap:12px}.offer-note{font-size:12px;color:var(--text-secondary);margin:12px 0 0}.quick-download #download-feedback{color:#ffc5de;font-size:13px;margin:12px 0 0}.quick-download #download-feedback:empty{display:none}.game .more{color:#e6d8ff;background:#9f70fd18;border:1px solid #9f70fd44;border-radius:20px;padding:8px 14px;margin-top:12px}.card-category{margin-bottom:10px}
+@media(max-width:480px){.back-link{margin:16px 0}.quick-download{padding:22px 20px}.quick-art img{width:96px;height:96px}.quick-download h1{font-size:26px}.quick-description{font-size:13px;margin-bottom:16px}}

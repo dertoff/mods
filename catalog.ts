@@ -7,7 +7,7 @@ const main = document.querySelector<HTMLElement>('#main')!;
 let query = '';
 const escape = (value: string) => value.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 const image = (game: Game) => `<img src="${escape(game.image)}" alt="${escape(game.name)} artwork" width="130" height="130" loading="lazy" data-fallback>`;
-const card = (game: Game) => `<a class="item" href="#app/${game.id}" aria-label="View ${escape(game.name)} details"><div class="image">${image(game)}<span class="mod">MOD</span></div><h3 class="name">${escape(game.name)}</h3><p class="card-category">${game.category}</p><div class="more"><span>Download</span><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m-5-5 5 5 5-5M5 16v5h14v-5"/></svg></div></a>`;
+const card = (game: Game) => `<a class="item" href="#app/${game.id}" aria-label="View ${escape(game.name)} details"><div class="image">${image(game)}<span class="mod">MOD</span></div><h3 class="name">${escape(game.name)}</h3><p class="card-category">${game.category}</p><div class="more"><span>View game</span><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></div></a>`;
 function renderResults() {
   const filtered = games.filter(g => `${g.name} ${g.description} ${g.category}`.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase()));
   document.querySelector('#game-list')!.innerHTML = filtered.map(card).join('');
@@ -23,7 +23,7 @@ function discover() {
 }
 function details(game: Game) {
   document.title = `${game.name} — Game MODs`;
-  main.innerHTML = `<a class="back-link" href="#catalog">← All apps</a><article class="quick-download" aria-labelledby="app-name"><div class="quick-art">${image(game)}</div><span class="status-badge">${game.category} · MOD</span><h1 id="app-name">${escape(game.name)}</h1><p class="quick-description">${escape(game.description)}</p><button id="download" class="primary-button">Download <span aria-hidden="true">↓</span></button><p class="offer-note">Opens an offer window. Complete the provider’s requirements to continue.</p><p id="download-feedback" role="status" aria-live="polite"></p></article>`;
+  main.innerHTML = `<a class="back-link" href="#catalog">← All apps</a><article class="quick-download" aria-labelledby="app-name"><div class="quick-art">${image(game)}</div><span class="status-badge">${game.category} · MOD</span><h1 id="app-name">${escape(game.name)}</h1><p class="quick-description">${escape(game.description)}</p><p class="offer-note" id="offer-notice">Complete an offer in the content locker to continue to the download. Requirements and any costs are shown by the provider.</p><button id="download" class="primary-button" aria-describedby="offer-notice">Download <span aria-hidden="true">↓</span></button><p id="download-feedback" role="status" aria-live="polite"></p></article>`;
   const download = main.querySelector<HTMLButtonElement>('#download')!;
   const downloadFeedback = main.querySelector<HTMLElement>('#download-feedback')!;
   download.addEventListener('click', async () => {

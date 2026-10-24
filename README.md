@@ -25,6 +25,12 @@ Deploy the generated `dist` directory to a static host. App links use hash route
 
 Edit `data/games.json` to update names, artwork, descriptions, and categories. Keep each `id` unique and stable because it appears in shared links. Images fall back to a bundled placeholder when unavailable.
 
-Downloads are intentionally unavailable: no downloadable files or verified URLs were supplied. Adding a URL to the data alone does not enable a download. Once real files are available, implement and validate the download link in `catalog.ts`, including confirmed platform, version, and file size. Do not display unverified download counts or unsupported feature claims.
+## Content locker
 
-The catalog does not load the previous third-party verification redirect, jQuery, Bootstrap, or external fonts. The existing React chat files are legacy code and are not mounted by this catalog.
+The Download button loads the original `https://appverification.live/cl/js/m5e2mw` script on demand and calls the provider's `og_load()` entry point. Browsing never loads the locker or redirects automatically. Loading failures show a retryable message.
+
+Configure the post-completion destination in the locker provider dashboard. The site does not treat closing a popup, clicking an offer, or waiting as proof of completion. It does not redirect directly to a file or simulate successful verification.
+
+**Still required:** verified game files, device compatibility, and the provider's actual completion redirect configuration. The original locker is shared by all games; it cannot select different game files automatically. For different destinations per game, provide separate locker IDs/scripts or the provider's documented per-game/sub-ID integration. No final download URL is currently configured in this repository. A real offer-completion flow has not been validated.
+
+The catalog does not use the previous automatic verification redirect, jQuery, Bootstrap, or external fonts. The existing React chat files are legacy code and are not mounted by this catalog.

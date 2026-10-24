@@ -194,3 +194,6 @@
 @media(max-width:800px){.catalog-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero-orb{opacity:.2;right:-30px}.detail-columns{grid-template-columns:1fr}.hero{padding:32px}.about-panel{grid-template-columns:1fr;gap:0}}
 @media(max-width:480px){.container-md{padding:0 16px}nav{padding:14px 16px}.brand{font-size:14px}.nav-links{gap:16px;font-size:12px}.hero{padding:28px 24px;margin-top:24px}.hero p{font-size:14px}.hero h1{font-size:36px}.catalog-grid{gap:12px}.catalog-toolbar{align-items:flex-start;flex-direction:column}.filters button{padding:7px 13px}.detail-page{padding:22px}.detail-heading{gap:16px;align-items:flex-start;flex-direction:column}.detail-heading h1{font-size:30px}.detail-art img{width:100px;height:100px}.the-title .name{font-size:20px}.download-panel{padding:22px}.about-panel{margin-top:40px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* Keep the catalog immediately visible on phones and desktops. */
+#catalog{padding-top:8px;min-height:60vh}#catalog .the-title{margin:18px 0 10px}#catalog .search .inp{margin:16px 0!important}#catalog-heading{letter-spacing:0}.catalog-grid{align-items:stretch}.xload .game .item{height:calc(100% - 20px)}

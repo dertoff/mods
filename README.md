@@ -1,6 +1,6 @@
 # Game MODs
 
-A responsive game catalog with the original dark violet/pink visual style. Browse cards, search or filter by category, and open a shareable detail page for each game.
+A responsive game catalog with the original dark violet/pink visual style. Browse cards, search by name, and open a shareable detail page for each game.
 
 ## Development
 

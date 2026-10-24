@@ -4,8 +4,6 @@ type Game = (typeof catalog)[number];
 const games: Game[] = catalog;
 const main = document.querySelector<HTMLElement>('#main')!;
 let query = '';
-let category = 'All';
-let sort = 'featured';
 let toastTimer: ReturnType<typeof setTimeout>;
 const escape = (value: string) => value.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 const image = (game: Game) => `<img src="${escape(game.image)}" alt="${escape(game.name)} artwork" width="130" height="130" loading="lazy" data-fallback>`;
@@ -16,21 +14,16 @@ function notify(message: string) {
   toastTimer = setTimeout(() => toast.classList.remove('visible'), 3500);
 }
 function renderResults() {
-  const filtered = games.filter(g => (category === 'All' || g.category === category) && `${g.name} ${g.description} ${g.category}`.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase()));
-  if (sort === 'name') filtered.sort((a,b) => a.name.localeCompare(b.name));
+  const filtered = games.filter(g => `${g.name} ${g.description} ${g.category}`.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase()));
   document.querySelector('#game-list')!.innerHTML = filtered.map(card).join('');
   document.querySelector('#result-count')!.textContent = `${filtered.length} ${filtered.length === 1 ? 'game' : 'games'}`;
   document.querySelector<HTMLElement>('#empty')!.hidden = filtered.length > 0;
-  document.querySelectorAll<HTMLButtonElement>('[data-category]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.category === category)));
 }
 function discover() {
   document.title = 'Game MODs — Discover your next game';
-  main.innerHTML = `<section class="hero"><span class="eyebrow">YOUR NEXT ADVENTURE STARTS HERE</span><h1>Big games.<br><span>Endless possibilities.</span></h1><p>Explore the catalog, find your favorite, and get all the details in one place.</p><a class="primary-link" href="#catalog">Explore games <span aria-hidden="true">↓</span></a><div class="hero-orb" aria-hidden="true">✦</div></section><section id="catalog" aria-labelledby="catalog-heading"><div class="search"><div class="inp"><label class="sr-only" for="inp">Search games</label><span class="icon" aria-hidden="true">⌕</span><input id="inp" type="search" placeholder="Search your next favorite game…" value="${escape(query)}" autocomplete="off"></div></div><div class="catalog-toolbar"><div class="filters" aria-label="Game categories">${['All','Action','Racing','Simulation'].map(c => `<button data-category="${c}" aria-pressed="${c === category}">${c}</button>`).join('')}</div><label class="sort-label">Sort <select id="sort"><option value="featured">Featured</option><option value="name">Name A–Z</option></select></label></div><div class="the-title"><h2 class="name" id="catalog-heading">Featured MODs</h2><span id="result-count" role="status" aria-live="polite"></span></div><div class="game"><div id="game-list" class="catalog-grid"></div><div id="empty" class="empty-state" hidden><span aria-hidden="true">⌕</span><h3>No games found</h3><p>Try another title or explore all categories.</p><button id="reset" class="secondary-button">Reset filters</button></div></div></section><section id="about" class="about-panel"><div><span class="eyebrow">A LITTLE MORE ABOUT US</span><h2>Discover. Explore. Play.</h2></div><p>A simple place to explore games and check release information. Downloads will appear on each app page when a file is available. No sign-up required to browse.</p></section>`;
+  main.innerHTML = `<section id="catalog" aria-labelledby="catalog-heading"><div class="search"><div class="inp"><label class="sr-only" for="inp">Search apps</label><span class="icon" aria-hidden="true">⌕</span><input id="inp" type="search" placeholder="Search apps…" value="${escape(query)}" autocomplete="off"></div></div><div class="the-title"><h1 class="name" id="catalog-heading">Game MODs</h1><span id="result-count" role="status" aria-live="polite"></span></div><div class="game"><div id="game-list" class="catalog-grid"></div><div id="empty" class="empty-state" hidden><h2>No apps found</h2><p>Try another name.</p><button id="reset" class="secondary-button">Clear search</button></div></div></section>`;
   main.querySelector('#inp')!.addEventListener('input', e => { query = (e.target as HTMLInputElement).value; renderResults(); });
-  main.querySelectorAll<HTMLButtonElement>('[data-category]').forEach(button => button.addEventListener('click', () => { category = button.dataset.category!; renderResults(); }));
-  const select = main.querySelector<HTMLSelectElement>('#sort')!; select.value = sort;
-  select.addEventListener('change', () => { sort = select.value; renderResults(); });
-  main.querySelector('#reset')!.addEventListener('click', () => { query = ''; category = 'All'; main.querySelector<HTMLInputElement>('#inp')!.value = ''; renderResults(); main.querySelector<HTMLInputElement>('#inp')!.focus(); });
+  main.querySelector('#reset')!.addEventListener('click', () => { query = ''; main.querySelector<HTMLInputElement>('#inp')!.value = ''; renderResults(); main.querySelector<HTMLInputElement>('#inp')!.focus(); });
   renderResults();
 }
 function details(game: Game) {
@@ -51,7 +44,7 @@ function route() {
   } else {
     if (!main.querySelector('#catalog')) discover();
   }
-  if (hash === 'catalog' || hash === 'about') document.getElementById(hash)?.scrollIntoView();
+  if (hash === 'catalog') document.getElementById(hash)?.scrollIntoView();
   else window.scrollTo(0, 0);
   main.focus({preventScroll: true});
 }

@@ -1,20 +1,30 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Game MODs
 
-# Run and deploy your AI Studio app
+A responsive game catalog with the original dark violet/pink visual style. Browse cards, search or filter by category, and open a shareable detail page for each game.
 
-This contains everything you need to run your app locally.
+## Development
 
-View your app in AI Studio: https://ai.studio/apps/drive/1NjRi0TlPxfMKLcfwNmyfIiHWnCkpAf3f
+Requires Node.js 22.12+ (Node 24 was validated).
 
-## Run Locally
+```sh
+npm install --package-lock=false
+npm run dev
+```
 
-**Prerequisites:**  Node.js
+The development server defaults to port 3000. No API key is needed for the catalog.
 
+```sh
+npm run build
+npx tsc --noEmit
+npm run preview
+```
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+Deploy the generated `dist` directory to a static host. App links use hash routes (`#app/forza-horizon-5`), so direct links work without host rewrite rules.
+
+## Catalog content
+
+Edit `data/games.json` to update names, artwork, descriptions, and categories. Keep each `id` unique and stable because it appears in shared links. Images fall back to a bundled placeholder when unavailable.
+
+Downloads are intentionally unavailable: no downloadable files or verified URLs were supplied. Adding a URL to the data alone does not enable a download. Once real files are available, implement and validate the download link in `catalog.ts`, including confirmed platform, version, and file size. Do not display unverified download counts or unsupported feature claims.
+
+The catalog does not load the previous third-party verification redirect, jQuery, Bootstrap, or external fonts. The existing React chat files are legacy code and are not mounted by this catalog.

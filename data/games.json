@@ -1,0 +1,34 @@
+[
+  {
+    "name": "Forza Horizon 5",
+    "image": "/images/forza-horizon-5.jpg",
+    "description": "Explore an open-world racing adventure set in Mexico.",
+    "id": "forza-horizon-5",
+    "category": "Racing",
+    "downloadUrl": null
+  },
+  {
+    "name": "Overwatch 2",
+    "image": "/images/overwatch-2.jpg",
+    "description": "Discover the team-based hero shooter and its characters.",
+    "id": "overwatch-2",
+    "category": "Action",
+    "downloadUrl": null
+  },
+  {
+    "name": "Marvel Rivals",
+    "image": "/images/marvel-rivals.jpg",
+    "description": "Explore team-based battles with Marvel heroes and villains.",
+    "id": "marvel-rivals",
+    "category": "Action",
+    "downloadUrl": null
+  },
+  {
+    "name": "Yandere Simulator",
+    "image": "/images/yandere-simulator.jpg",
+    "description": "Learn more about the school-based stealth simulation game.",
+    "id": "yandere-simulator",
+    "category": "Simulation",
+    "downloadUrl": null
+  }
+]

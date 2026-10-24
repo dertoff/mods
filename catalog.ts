@@ -21,18 +21,34 @@ function discover() {
   main.querySelector('#reset')!.addEventListener('click', () => { query = ''; main.querySelector<HTMLInputElement>('#inp')!.value = ''; renderResults(); main.querySelector<HTMLInputElement>('#inp')!.focus(); });
   renderResults();
 }
+const downloadIcon = `<svg class="download-arrow" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m-5-5 5 5 5-5M5 17v4h14v-4"/></svg>`;
+const downloadContents = `<span>Download</span><span class="download-symbol" aria-hidden="true">${downloadIcon}</span>`;
 function details(game: Game) {
   document.title = `${game.name} — Game MODs`;
-  main.innerHTML = `<a class="back-link" href="#catalog">← All apps</a><article class="quick-download" aria-labelledby="app-name"><div class="quick-art">${image(game)}</div><span class="status-badge">${game.category} · MOD</span><h1 id="app-name">${escape(game.name)}</h1><p class="quick-description">${escape(game.description)}</p><p class="offer-note" id="offer-notice">Complete an offer in the content locker to continue to the download. Requirements and any costs are shown by the provider.</p><button id="download" class="primary-button" aria-describedby="offer-notice">Download <span aria-hidden="true">↓</span></button><p id="download-feedback" role="status" aria-live="polite"></p></article>`;
+  main.innerHTML = `<a class="back-link" href="#catalog">← All apps</a><article class="quick-download" aria-labelledby="app-name"><div class="quick-art">${image(game)}</div><span class="status-badge">${game.category} · MOD</span><h1 id="app-name">${escape(game.name)}</h1><p class="quick-description">${escape(game.description)}</p><p class="offer-note" id="offer-notice">Complete an offer in the content locker to continue to the download. Requirements and any costs are shown by the provider.</p><button id="download" class="primary-button" aria-describedby="offer-notice" aria-busy="false">${downloadContents}</button><p id="download-feedback" role="status" aria-live="polite"></p></article>`;
   const download = main.querySelector<HTMLButtonElement>('#download')!;
   const downloadFeedback = main.querySelector<HTMLElement>('#download-feedback')!;
   download.addEventListener('click', async () => {
     download.disabled = true;
-    download.textContent = 'Opening offers…';
+    download.setAttribute('aria-busy', 'true');
+    download.classList.remove('download-error');
+    download.classList.add('is-opening');
+    download.innerHTML = '<span>Opening offers…</span><span class="download-spinner" aria-hidden="true"></span>';
+    downloadFeedback.classList.remove('is-error');
     downloadFeedback.textContent = '';
-    try { await openContentLocker(); }
-    catch (error) { downloadFeedback.textContent = error instanceof Error ? error.message : 'Could not open offers. Please try again.'; }
-    finally { download.disabled = false; download.textContent = 'Download'; }
+    try {
+      await openContentLocker();
+      downloadFeedback.textContent = 'Offer window opened. Follow the provider’s instructions to continue.';
+    } catch (error) {
+      downloadFeedback.classList.add('is-error');
+      download.classList.add('download-error');
+      downloadFeedback.textContent = error instanceof Error ? error.message : 'Could not open offers. Please try again.';
+    } finally {
+      download.disabled = false;
+      download.setAttribute('aria-busy', 'false');
+      download.classList.remove('is-opening');
+      download.innerHTML = downloadContents;
+    }
   });
 
 }
